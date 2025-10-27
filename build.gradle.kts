@@ -33,9 +33,6 @@ publishing {
             groupId = project.group.toString()
             artifactId = "jbn-client-server"
             version = project.version.toString()
-
-            artifact(tasks["sourcesJar"])
-            artifact(tasks["javadocJar"])
         }
     }
 
