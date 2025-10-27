@@ -11,7 +11,7 @@ import io.github.yaminahmed123.protocol.BINTP;
 public class Server extends Thread{
     private ServerSocket server_socket;
     private Socket client_socket;
-    public boolean server_on = true;
+    private boolean server_on = true;
     private InputStream is;
     private byte[] SERVER_BUFFER = new byte[1000 * 1000 * 512];
 
