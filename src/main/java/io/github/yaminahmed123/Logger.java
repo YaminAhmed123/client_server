@@ -9,6 +9,7 @@ public abstract class Logger {
     private static final String red = "\u001B[31m";
     private static final String green = "\u001B[32m";
     private static final String yellow = "\u001B[33m";
+    private static final String blue = "\u001B[34m";
     private static final String reset = "\u001B[0m"; // reset color
 
     private static final String space = "         ";
@@ -54,5 +55,9 @@ public abstract class Logger {
 
     public static void ERROR_LOG(String f_name, String msg){
         System.out.println(red+bracketString(f_name)+space+msg+reset);
+    }
+
+    public static void APPLICATION_LOG_R(String application, String msg){
+        System.out.print("\r"+blue+bracketString(application)+space+msg+reset);
     }
 }

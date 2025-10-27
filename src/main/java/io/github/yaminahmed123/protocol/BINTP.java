@@ -75,18 +75,44 @@ public class BINTP extends Protocol{
     * It is hard to maintain and there is a chance where the last 10 bytes that are 0xAA are not in one buffer.
     * Which will cause a lot of errors. This will end up causing a lot of Exceptions, and it will corrupt the file that was sent.
     */
+
+    private long BYTES_READ_TOTAL = 0;
+    private synchronized void TOTAL_BYTES_READ(){
+        while(this.BYTES_READ_TOTAL!=-1){
+            double d = this.BYTES_READ_TOTAL;
+            double MB_TOTAL = d / (1000.0*1000.0);
+            Logger.APPLICATION_LOG_R("MONITORING", "Total Mega bytes written: "+MB_TOTAL+" MB");
+            try{
+                Thread.sleep(250);
+            } catch (Exception e){
+                Logger.ERROR_LOG("MONITORING", "Monitoring function failed !");
+            }
+        }
+        System.out.println(" ");
+    }
     
     @Override
     public void receive_data(InputStream is, byte[] buffer){
         String temp_file_name = "temp.bin";
         String filename = "ERROR";
 
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                TOTAL_BYTES_READ();
+            }
+        });
+
         try{
             boolean firstcall = true;
             int bytesRead;
             OutputStream os = new FileOutputStream(temp_file_name);
             while((bytesRead=writeInputStreamToBuffer(is, buffer)) != -1){
+                BYTES_READ_TOTAL += bytesRead;
                 if(firstcall){
+                    // Total bytes read print
+                    t.start();
+
                     if(checkFirst4Bytes(buffer)==-1){
                         Logger.FUNCTION_LOG_D("DEBUG-MAIN", "Quiting loop no header found !");
                         firstcall = false;
@@ -97,8 +123,11 @@ public class BINTP extends Protocol{
                 os.write(buffer, 0, bytesRead);
             }
             os.close();
+            this.BYTES_READ_TOTAL = -1;
+
+            t.join();
             Logger.FUNCTION_LOG_D("DEBUG-MAIN", "Raw data written to disk as: "+temp_file_name);
-        } catch(IOException e) {
+        } catch(Exception e ) {
             e.printStackTrace();
         }
 

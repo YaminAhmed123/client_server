@@ -13,11 +13,11 @@ public class Main {
         server.start();                         // Look for the logs the server might print some stuff.
 
         // Set up the client
-        Client client = new Client("localhost", BINTP.DEFAULT_PORT);
-        client.send_binary_data_bintp("Blender.jpg", "C:\\Users\\Yamin\\Downloads\\SCREEN.jpg");
+        Client client = new Client("blackspider.zapto.org", BINTP.DEFAULT_PORT);
+        client.send_binary_data_bintp("A.mkv", "C:\\Users\\Yamin\\Downloads\\a.mkv");
 
         try {
-            Thread.sleep(1000 * 15);  // 1,000 milliseconds = 1 seconds
+            Thread.sleep(1000 * 25);  // 1,000 milliseconds = 1 seconds
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
