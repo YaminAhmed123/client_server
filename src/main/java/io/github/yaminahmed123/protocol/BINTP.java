@@ -126,6 +126,7 @@ public class BINTP extends Protocol{
             this.BYTES_READ_TOTAL = -1;
 
             t.join();
+            this.BYTES_READ_TOTAL = 0;
             Logger.FUNCTION_LOG_D("DEBUG-MAIN", "Raw data written to disk as: "+temp_file_name);
         } catch(Exception e ) {
             e.printStackTrace();
