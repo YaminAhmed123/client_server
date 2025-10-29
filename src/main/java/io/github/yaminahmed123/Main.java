@@ -13,8 +13,15 @@ public class Main {
         server.start();                         // Look for the logs the server might print some stuff.
 
         // Set up the client
-        Client client = new Client("blackspider.zapto.org", new BINTP());
-        client.send_binary_data_bintp("A.mkv", "C:\\Users\\Yamin\\Downloads\\a.mkv");
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Client client = new Client("blackspider.zapto.org", new BINTP());
+                client.send_binary_data_bintp("A.mkv", "C:\\Users\\Yamin\\Downloads\\a.mkv");
+            }
+        });
+        t.start();
 
         try {
             Thread.sleep(1000 * 25);  // 1,000 milliseconds = 1 seconds
