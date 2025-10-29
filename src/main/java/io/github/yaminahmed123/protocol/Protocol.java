@@ -9,6 +9,7 @@ package io.github.yaminahmed123.protocol;
 public abstract class Protocol implements Binarydata{
     public byte[] PROTOCOL_HEADER;
     public byte[] PROTOCOL_ENDING_SEQUENCE;
+    public int DEFAULT_PORT = -1;
 
     @Override
     public void receive_data() {

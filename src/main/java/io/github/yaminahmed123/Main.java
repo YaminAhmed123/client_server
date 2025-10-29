@@ -9,11 +9,11 @@ public class Main {
         Logger.FUNCTION_LOG_D("DEBUG-MAIN", "Consider running a release version !");
 
         // Run the server in a different Thread
-        Server server = new Server(BINTP.DEFAULT_PORT);
+        Server server = new Server(new BINTP());
         server.start();                         // Look for the logs the server might print some stuff.
 
         // Set up the client
-        Client client = new Client("blackspider.zapto.org", BINTP.DEFAULT_PORT);
+        Client client = new Client("blackspider.zapto.org", new BINTP());
         client.send_binary_data_bintp("A.mkv", "C:\\Users\\Yamin\\Downloads\\a.mkv");
 
         try {

@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.rmi.ServerException;
 
 import io.github.yaminahmed123.protocol.BINTP;
+import io.github.yaminahmed123.protocol.Protocol;
 
 public class Server extends Thread{
     private ServerSocket server_socket;
@@ -15,13 +16,17 @@ public class Server extends Thread{
     private InputStream is;
     private byte[] SERVER_BUFFER = new byte[1000 * 1000 * 512];
 
-    public Server(int port){
-        setServer_socket(port);
+    private Protocol protocol;
+
+    public Server(Protocol protocol){
+        this.protocol = protocol;
+        setServer_socket(this.protocol.DEFAULT_PORT);
     }
 
     private void setServer_socket(int port){
         try{
             this.server_socket = new ServerSocket(port, 1);
+            Logger.APPLICATION_LOG("SERVER-MAIN", "Listening on port: "+this.protocol.DEFAULT_PORT);
         } catch(IOException e){
             Logger.APPLICATION_LOG("SERVER-MAIN", "Server shutting down now");
         }
@@ -51,19 +56,6 @@ public class Server extends Thread{
         }
     }
 
-    // Test function to test data received from client
-    private void receive_data(){
-        try{
-            InputStream is = this.client_socket.getInputStream();
-            byte[] data_buffer = new byte[8*1000];      // 8KB large buffer
-            int r_bytes = is.read(data_buffer);
-            String text = new String(data_buffer, StandardCharsets.UTF_16);
-            System.out.println(text);
-        } catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-
     private void run_server(){
         if(waitForConnection() == 0){
             String ip = this.client_socket.getInetAddress().getHostAddress();
@@ -73,8 +65,7 @@ public class Server extends Thread{
             } catch(IOException e){
                 e.printStackTrace();
             }
-            BINTP bintp = new BINTP();
-            bintp.receive_data(this.is, SERVER_BUFFER);
+            this.protocol.receive_data(this.is, SERVER_BUFFER);
 
             Logger.APPLICATION_LOG("SERVER-MAIN", "File received successfully");
         } else{
@@ -91,6 +82,7 @@ public class Server extends Thread{
             this.server_on = false;
             this.server_socket.close();
         } catch(IOException e){
+            Logger.ERROR_LOG("SERVER-MAIN", "Could not turn off server !");
             e.printStackTrace();
         }
     }

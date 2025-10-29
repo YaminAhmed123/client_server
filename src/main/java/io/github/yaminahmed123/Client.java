@@ -6,13 +6,16 @@ import java.io.OutputStream;
 import java.net.*;
 
 import io.github.yaminahmed123.protocol.BINTP;
+import io.github.yaminahmed123.protocol.Protocol;
 
 public class Client {
     private Socket client_socket;
-    private byte[] DATA_BUFFER = new byte[1000 * 1000 * 64];     //64MB large buffer
+    private byte[] DATA_BUFFER = new byte[1000 * 1000 * 128];     //64MB large buffer
+    private Protocol protocol;
 
-    public Client(String host, int port){
-        setClient_socket(host, port);
+    public Client(String host, Protocol protocol){
+        this.protocol = protocol;
+        setClient_socket(host, this.protocol.DEFAULT_PORT);
     }
 
     private void setClient_socket(String host, int port){

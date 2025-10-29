@@ -21,12 +21,13 @@ import java.util.Arrays;
 
 public class BINTP extends Protocol{
 
-    public static int DEFAULT_PORT = 8066;
+
     private final String file_path;
     private final OutputStream os;
     private final int LOCAL_HEADER_SIZE_LIMIT = 1000;
 
     public BINTP(String file_name, String file_path, OutputStream os){
+        super.DEFAULT_PORT = 8066;
 
         byte[] file_name_binary_utf_16 = file_name.getBytes(StandardCharsets.UTF_16);
         super.PROTOCOL_HEADER = new byte[file_name_binary_utf_16.length + 8];
@@ -61,6 +62,7 @@ public class BINTP extends Protocol{
 
     // This Constructor is only for server usage !
     public BINTP(){
+        super.DEFAULT_PORT = 8066;
         Logger.FUNCTION_LOG_D("DEBUG-MAIN", "BINTP for server constructor was chosen");
         this.os = null;
         this.file_path = null;
