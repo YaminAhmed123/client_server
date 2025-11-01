@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.*;
 
-import io.github.yaminahmed123.protocol.BINTP;
+import io.github.yaminahmed123.protocol.bintp.BINTP;
 import io.github.yaminahmed123.protocol.Protocol;
 
 public class Client {

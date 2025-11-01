@@ -1,6 +1,6 @@
 package io.github.yaminahmed123;
 
-import io.github.yaminahmed123.protocol.BINTP;
+import io.github.yaminahmed123.protocol.bintp.BINTP;
 
 // This branch is to develop client/server not meant for usage !
 public class Main {

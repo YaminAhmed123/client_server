@@ -1,6 +1,7 @@
-package io.github.yaminahmed123.protocol;
+package io.github.yaminahmed123.protocol.bintp;
 
 import io.github.yaminahmed123.Logger;
+import io.github.yaminahmed123.protocol.Protocol;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -19,7 +20,7 @@ import java.util.Arrays;
  *  there are 10 bytes that must always be 0xAA
  */
 
-public class BINTP extends Protocol{
+public class BINTP extends Protocol {
 
 
     private final String file_path;
@@ -78,42 +79,24 @@ public class BINTP extends Protocol{
     * Which will cause a lot of errors. This will end up causing a lot of Exceptions, and it will corrupt the file that was sent.
     */
 
-    private long BYTES_READ_TOTAL = 0;
-    private synchronized void TOTAL_BYTES_READ(){
-        while(this.BYTES_READ_TOTAL!=-1){
-            double d = this.BYTES_READ_TOTAL;
-            double MB_TOTAL = d / (1000.0*1000.0);
-            Logger.APPLICATION_LOG_R("MONITORING", "Total Mega bytes written: "+MB_TOTAL+" MB");
-            try{
-                Thread.sleep(250);
-            } catch (Exception e){
-                Logger.ERROR_LOG("MONITORING", "Monitoring function failed !");
-            }
-        }
-        System.out.println(" ");
-    }
+
     
     @Override
     public void receive_data(InputStream is, byte[] buffer){
         String temp_file_name = "temp.bin";
         String filename = "ERROR";
 
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                TOTAL_BYTES_READ();
-            }
-        });
+        Monitoring monitoring = new Monitoring();
 
         try{
             boolean firstcall = true;
             int bytesRead;
             OutputStream os = new FileOutputStream(temp_file_name);
             while((bytesRead=writeInputStreamToBuffer(is, buffer)) != -1){
-                BYTES_READ_TOTAL += bytesRead;
+                monitoring.addBytes(bytesRead);
                 if(firstcall){
                     // Total bytes read print
-                    t.start();
+                    monitoring.start();
 
                     if(checkFirst4Bytes(buffer)==-1){
                         Logger.FUNCTION_LOG_D("DEBUG-MAIN", "Quiting loop no header found !");
@@ -125,10 +108,10 @@ public class BINTP extends Protocol{
                 os.write(buffer, 0, bytesRead);
             }
             os.close();
-            this.BYTES_READ_TOTAL = -1;
+            monitoring.setBytes(-1);
 
-            t.join();
-            this.BYTES_READ_TOTAL = 0;
+            monitoring.join();
+            monitoring.setBytes(0);
             Logger.FUNCTION_LOG_D("DEBUG-MAIN", "Raw data written to disk as: "+temp_file_name);
         } catch(Exception e ) {
             e.printStackTrace();
