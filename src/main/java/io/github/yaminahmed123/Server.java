@@ -3,10 +3,6 @@ package io.github.yaminahmed123;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.*;
-import java.nio.charset.StandardCharsets;
-import java.rmi.ServerException;
-
-import io.github.yaminahmed123.protocol.BINTP;
 import io.github.yaminahmed123.protocol.Protocol;
 
 public class Server extends Thread{
